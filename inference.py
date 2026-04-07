@@ -20,7 +20,7 @@ API_BASE_URL = os.getenv("API_BASE_URL", "https://router.huggingface.co/v1")
 MODEL_NAME = os.getenv("MODEL_NAME", "Qwen/Qwen2.5-72B-Instruct")
 HF_TOKEN = os.getenv("HF_TOKEN") or os.getenv("API_KEY")
 TASK_NAME = os.getenv("PROMPTSHIELD_TASK", "task_easy")
-SERVER_URL = os.getenv("SERVER_URL", "http://localhost:7860")
+SERVER_URL = os.getenv("SERVER_URL", "https://nideshkaarthikrs-promptshield.hf.space")
 MAX_STEPS = 8
 
 SYSTEM_PROMPT = """You are a security analyst evaluating prompts for injection attacks.
