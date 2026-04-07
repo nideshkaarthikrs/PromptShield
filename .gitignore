@@ -1,0 +1,30 @@
+# Claude Code internal files
+.claude/
+
+# Secrets
+.env
+
+# Local-only documents
+PromptShield_Explainer.html
+PromptShield_ClaudeCode_Prompts.pdf
+PromptShield_PRD.pdf
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
