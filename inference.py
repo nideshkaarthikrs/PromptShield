@@ -90,7 +90,7 @@ def run_task(client: OpenAI, task_name: str) -> None:
         for step in range(1, MAX_STEPS + 1):
             action_dict = call_llm(client, obs, step, MAX_STEPS)
 
-            error_msg = "none"
+            error_msg = "null"
             reward_val = 0.0
             done = False
             classification = action_dict.get("classification", "safe")
@@ -138,11 +138,11 @@ def run_task(client: OpenAI, task_name: str) -> None:
         score = sum(rewards) / max_possible if rewards else 0.0
         score = max(0.0, min(1.0, score))
         success = score >= 0.5
-        rewards_str = str([round(r, 2) for r in rewards])
+        rewards_str = ",".join(f"{r:.2f}" for r in rewards)
 
         print(
             f"[END] success={str(success).lower()} steps={steps_taken} "
-            f"score={score:.3f} rewards={rewards_str}",
+            f"score={score:.2f} rewards={rewards_str}",
             flush=True,
         )
 
