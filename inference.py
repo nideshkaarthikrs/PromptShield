@@ -10,16 +10,14 @@ CRITICAL: stdout format is strictly enforced:
 
 import json
 import os
-import sys
 
 import requests
 from openai import OpenAI
 
-API_BASE_URL = os.getenv("API_BASE_URL", "https://router.huggingface.co/v1")
-MODEL_NAME = os.getenv("MODEL_NAME", "Qwen/Qwen2.5-72B-Instruct")
-HF_TOKEN = os.getenv("API_KEY") or os.getenv("HF_TOKEN")
-TASK_NAME = os.getenv("PROMPTSHIELD_TASK", "task_easy")
-SERVER_URL = os.getenv("ENV_URL", "https://nideshkaarthikrs-promptshield.hf.space")
+API_KEY = os.environ.get("API_KEY")
+API_BASE_URL = os.environ.get("API_BASE_URL") or "https://router.huggingface.co/v1"
+MODEL_NAME = os.environ.get("MODEL_NAME") or "Qwen/Qwen2.5-72B-Instruct"
+SERVER_URL = os.environ.get("ENV_URL") or "https://nideshkaarthikrs-promptshield.hf.space"
 MAX_STEPS = 8
 
 SYSTEM_PROMPT = """You are a security analyst evaluating prompts for injection attacks.
@@ -148,7 +146,7 @@ def run_task(client: OpenAI, task_name: str) -> None:
 
 def main():
     try:
-        client = OpenAI(base_url=API_BASE_URL, api_key=HF_TOKEN or "dummy")
+        client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
     except Exception as e:
         for task in ["task_easy", "task_medium", "task_hard"]:
             print(f"[START] task={task} env=promptshield model={MODEL_NAME}", flush=True)
