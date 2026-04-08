@@ -8,7 +8,6 @@ CRITICAL: stdout format is strictly enforced:
   [END] success=<true|false> steps=<n> score=<0.000> rewards=<list>
 """
 
-import asyncio
 import json
 import os
 import sys
@@ -18,9 +17,9 @@ from openai import OpenAI
 
 API_BASE_URL = os.getenv("API_BASE_URL", "https://router.huggingface.co/v1")
 MODEL_NAME = os.getenv("MODEL_NAME", "Qwen/Qwen2.5-72B-Instruct")
-HF_TOKEN = os.getenv("HF_TOKEN") or os.getenv("API_KEY")
+HF_TOKEN = os.getenv("API_KEY") or os.getenv("HF_TOKEN")
 TASK_NAME = os.getenv("PROMPTSHIELD_TASK", "task_easy")
-SERVER_URL = os.getenv("SERVER_URL", "https://nideshkaarthikrs-promptshield.hf.space")
+SERVER_URL = os.getenv("ENV_URL", "https://nideshkaarthikrs-promptshield.hf.space")
 MAX_STEPS = 8
 
 SYSTEM_PROMPT = """You are a security analyst evaluating prompts for injection attacks.
@@ -136,23 +135,30 @@ def run_task(client: OpenAI, task_name: str) -> None:
     finally:
         max_possible = MAX_STEPS * 1.0
         score = sum(rewards) / max_possible if rewards else 0.0
-        score = max(0.0, min(1.0, score))
+        score = max(0.001, min(0.999, score))
         success = score >= 0.5
         rewards_str = ",".join(f"{r:.2f}" for r in rewards)
 
         print(
-            f"[END] success={str(success).lower()} steps={steps_taken} "
-            f"score={score:.2f} rewards={rewards_str}",
+            f"[END] task={task_name} success={str(success).lower()} steps={steps_taken} "
+            f"score={score:.3f} rewards={rewards_str}",
             flush=True,
         )
 
 
-async def main():
-    client = OpenAI(base_url=API_BASE_URL, api_key=HF_TOKEN or "dummy")
+def main():
+    try:
+        client = OpenAI(base_url=API_BASE_URL, api_key=HF_TOKEN or "dummy")
+    except Exception as e:
+        for task in ["task_easy", "task_medium", "task_hard"]:
+            print(f"[START] task={task} env=promptshield model={MODEL_NAME}", flush=True)
+            print(f"[STEP] step=0 action=safe reward=0.00 done=true error={str(e)[:80]}", flush=True)
+            print(f"[END] task={task} success=false steps=0 score=0.001 rewards=", flush=True)
+        return
 
     for task in ["task_easy", "task_medium", "task_hard"]:
         run_task(client, task)
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
