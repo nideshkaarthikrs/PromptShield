@@ -59,7 +59,8 @@ def call_llm(client: OpenAI, observation: dict, step: int, total_steps: int) -> 
             if content.startswith("json"):
                 content = content[4:]
         return json.loads(content)
-    except Exception:
+    except Exception as e:
+        print(f"[DEBUG] LLM error: {str(e)[:100]}", flush=True)
         return {
             "classification": "safe",
             "confidence": 0.5,

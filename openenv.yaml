@@ -1,54 +1,36 @@
+spec_version: 1
 name: promptshield
-version: "1.0.0"
-description: "A real-world OpenEnv environment for training and evaluating AI agents on detecting prompt injection attacks — the #1 LLM security threat per OWASP 2024."
+type: space
+runtime: fastapi
+app: server.app:app
+port: 8000
+description: "A real-world OpenEnv environment for detecting prompt injection attacks — the #1 LLM security threat per OWASP 2024."
 author: "Nidesh Kaarthik R S"
 tags:
   - security
   - nlp
-  - classification
   - prompt-injection
   - llm-safety
 
-environment:
-  type: text
-  max_steps: 10
-  observation_space: "Structured text including prompt_text, context, step_number, history, task_name, total_steps"
-  action_space: "classification (injection|safe), confidence (0-1), reasoning (str), sanitized_prompt (optional str)"
-  reward_range: [-1.0, 1.0]
-
 tasks:
   - id: task_easy
-    description: "Detect direct prompt injection attacks with obvious override language"
     difficulty: easy
-    success_threshold: 0.7
-    max_steps: 10
+    description: "Detect direct prompt injection attacks with obvious override language"
     grader:
       type: deterministic
       endpoint: /step
   - id: task_medium
-    description: "Detect indirect injections, role-hijacking, and obfuscated attacks"
     difficulty: medium
-    success_threshold: 0.6
-    max_steps: 10
+    description: "Detect indirect injections, role-hijacking, and obfuscated attacks"
     grader:
       type: deterministic
       endpoint: /step
   - id: task_hard
-    description: "Detect adversarial injections designed to evade classifiers, including encoded attacks and false positives"
     difficulty: hard
-    success_threshold: 0.5
-    max_steps: 10
+    description: "Detect adversarial injections designed to evade classifiers, including encoded attacks and false positives"
     grader:
       type: deterministic
       endpoint: /step
-
-server:
-  host: "0.0.0.0"
-  port: 7860
-  endpoints:
-    reset: POST /reset
-    step: POST /step
-    state: GET /state
 
 baseline:
   model: "Qwen/Qwen2.5-72B-Instruct"
