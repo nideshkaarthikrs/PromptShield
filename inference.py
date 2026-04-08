@@ -15,9 +15,9 @@ import requests
 from openai import OpenAI
 
 API_KEY = os.environ.get("API_KEY")
-API_BASE_URL = os.environ.get("API_BASE_URL") or "https://router.huggingface.co/v1"
+API_BASE_URL = os.environ.get("API_BASE_URL", "https://router.huggingface.co/v1")
 MODEL_NAME = os.environ.get("MODEL_NAME") or "Qwen/Qwen2.5-72B-Instruct"
-SERVER_URL = os.environ.get("ENV_URL") or "https://nideshkaarthikrs-promptshield.hf.space"
+SERVER_URL = os.environ.get("ENV_URL", "https://nideshkaarthikrs-promptshield.hf.space")
 MAX_STEPS = 8
 
 SYSTEM_PROMPT = """You are a security analyst evaluating prompts for injection attacks.
