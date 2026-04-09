@@ -14,7 +14,7 @@ import os
 import requests
 from openai import OpenAI
 
-API_KEY = os.environ.get("API_KEY")
+API_KEY = os.environ.get("HF_TOKEN") or os.environ.get("API_KEY")
 API_BASE_URL = os.environ.get("API_BASE_URL", "https://router.huggingface.co/v1")
 MODEL_NAME = os.environ.get("MODEL_NAME") or "Qwen/Qwen2.5-72B-Instruct"
 SERVER_URL = os.environ.get("ENV_URL", "https://nideshkaarthikrs-promptshield.hf.space")
@@ -146,15 +146,7 @@ def run_task(client: OpenAI, task_name: str) -> None:
 
 
 def main():
-    try:
-        client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
-    except Exception as e:
-        for task in ["task_easy", "task_medium", "task_hard"]:
-            print(f"[START] task={task} env=promptshield model={MODEL_NAME}", flush=True)
-            print(f"[STEP] step=0 action=safe reward=0.00 done=true error={str(e)[:80]}", flush=True)
-            print(f"[END] task={task} success=false steps=0 score=0.001 rewards=", flush=True)
-        return
-
+    client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
     for task in ["task_easy", "task_medium", "task_hard"]:
         run_task(client, task)
 
