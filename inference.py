@@ -14,7 +14,7 @@ import os
 import requests
 from openai import OpenAI
 
-API_KEY = os.environ.get("HF_TOKEN") or os.environ.get("API_KEY")
+API_KEY = os.environ.get("API_KEY")
 API_BASE_URL = os.environ.get("API_BASE_URL", "https://router.huggingface.co/v1")
 MODEL_NAME = os.environ.get("MODEL_NAME") or "Qwen/Qwen2.5-72B-Instruct"
 SERVER_URL = os.environ.get("ENV_URL", "https://nideshkaarthikrs-promptshield.hf.space")
